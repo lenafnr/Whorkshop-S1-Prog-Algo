@@ -627,6 +627,76 @@ void convolution3(sil::Image &image)
     image = new_image;
 }
 
+struct Lab
+{
+    float L;
+    float a;
+    float b;
+};
+struct RGB
+{
+    float r;
+    float g;
+    float b;
+};
+
+glm::vec3 lab(glm::vec3 c)
+{
+    float l = 0.4122214708f * c.r + 0.5363325363f * c.g + 0.0514459929f * c.b;
+    float m = 0.2119034982f * c.r + 0.6806995451f * c.g + 0.1073969566f * c.b;
+    float s = 0.0883024619f * c.r + 0.2817188376f * c.g + 0.6299787005f * c.b;
+
+    float l_ = cbrtf(l);
+    float m_ = cbrtf(m);
+    float s_ = cbrtf(s);
+
+    return {
+        0.2104542553f * l_ + 0.7936177850f * m_ - 0.0040720468f * s_,
+        1.9779984951f * l_ - 2.4285922050f * m_ + 0.4505937099f * s_,
+        0.0259040371f * l_ + 0.7827717662f * m_ - 0.8086757660f * s_,
+    };
+}
+
+glm::vec3 rgb(glm::vec3 c)
+{
+    float l_ = c.x + 0.3963377774f * c.y + 0.2158037573f * c.z;
+    float m_ = c.x - 0.1055613458f * c.y - 0.0638541728f * c.z;
+    float s_ = c.x - 0.0894841775f * c.y - 1.2914855480f * c.z;
+
+    float l = l_ * l_ * l_;
+    float m = m_ * m_ * m_;
+    float s = s_ * s_ * s_;
+
+    return {
+        +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+        -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+        -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
+    };
+}
+
+void GradientOklab(sil::Image &image)
+{
+    glm::vec3 color1(1.0f, 0.0f, 0.0f);
+    glm::vec3 color2(0.0f, 0.0f, 1.0f);
+
+    int width = image.width();
+    int height = image.height();
+
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+
+            float mixedF = static_cast<float>(x) / width;
+
+            glm::vec3 mixedC = rgb(glm::mix(lab(color1), lab(color2), mixedF));
+
+            image.pixel(x, y) = mixedC;
+        }
+    }
+
+}
+
 // void differenceGaussienne(sil::Image &image)
 // {
 //     sil::Image blur1 = image;
@@ -822,9 +892,8 @@ int main()
     }
 
     {
-        sil::Image image{"images/logo.png"};
-        // TODO: modifier l'image
-        differenceGaussienne(image);
-        image.save("output/diffGaussienne.png");
+        sil::Image image(500, 500);
+        GradientOklab(image);
+        image.save("output/GradientOklab.png");
     }
 }

@@ -36,7 +36,7 @@ Template de projet pour le workshop de prog des Imac1. Vous trouverez le sujet i
 ![](./output/cercle.png)
 
 ## Animation
-![](./output/black_and_white_logo.png)
+![](./output/ezgif.com-animated-gif-maker)
 
 ## Rosace
 ![](./output/rosace.png)
@@ -52,6 +52,9 @@ Template de projet pour le workshop de prog des Imac1. Vous trouverez le sujet i
 
 ## Tri Pixels
 ![](./output/sort.png)
+
+## Gradient Oklab
+![](./output/GradientOklab.png)
 
 ## Fractale
 ![](./output/mandelbrot.png)
