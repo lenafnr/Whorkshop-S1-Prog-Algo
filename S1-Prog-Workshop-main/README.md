@@ -36,7 +36,7 @@ Template de projet pour le workshop de prog des Imac1. Vous trouverez le sujet i
 ![](./output/cercle.png)
 
 ## Animation
-![](./output/ezgif.com-animated-gif-maker)
+![](./output/ezgif.com-animated-gif-maker.gif)
 
 ## Rosace
 ![](./output/rosace.png)
